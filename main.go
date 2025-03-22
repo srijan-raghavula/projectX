@@ -19,6 +19,8 @@ func main() {
 		staticFS.ServeHTTP(w, r)
 	})
 
+	mux.HandleFunc("/v1/test/", tempHandler)
+
 	srv := http.Server{
 		Addr:    "localhost:" + port,
 		Handler: mux,
