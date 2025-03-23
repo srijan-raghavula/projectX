@@ -21,6 +21,26 @@ func main() {
 
 	mux.HandleFunc("/v1/test/", tempHandler)
 
+	//USER RELATED ENDPOINTS
+	//Create User
+	mux.HandleFunc("POST /v1/users/", createUserHandler)
+	//Get User
+	mux.HandleFunc("GET /v1/users/", getUserHandler)
+	//Delete User
+	mux.HandleFunc("DELTE /v1/users/", deleteUserHandelr)
+	//Update User
+	mux.HandleFunc("PUT /v1/users/", updateUserHandler)
+
+	//POST RELATED ENDPOINTS
+	//Create Post
+	mux.HandleFunc("POST /v1/posts/", createPostHandler)
+	//Get Post
+	mux.HandleFunc("GET /v1/posts/", getPostHandler)
+	//Delete Post
+	mux.HandleFunc("DELETE /v1/posts/", deletePostHandler)
+	//Update Post
+	mux.HandleFunc("PUT /v1/posts/", updatePostHandler)
+
 	srv := http.Server{
 		Addr:    "localhost:" + port,
 		Handler: mux,
