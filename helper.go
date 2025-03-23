@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -20,4 +22,34 @@ func tempHandler(w http.ResponseWriter, _ *http.Request) {
         </body>
         </html>
         `))
+}
+
+func respondWithErr(w http.ResponseWriter, code int, err error, msg string) {
+	fmt.Println("Responding with error:", err)
+
+	payload, err := json.Marshal(ErrResponsePayload{
+		Message: err.Error(),
+		Extras:  msg,
+	})
+	if err != nil {
+		w.Header().Add("Content-Type", "text/html")
+		respondWithErr(w, http.StatusInternalServerError, err, "failed to marshal error message")
+		return
+	}
+
+	w.WriteHeader(code)
+	w.Write(payload)
+}
+
+func respondWithPayload(w http.ResponseWriter, code int, payload any) {
+	fmt.Println("Responding with payload")
+
+	writeData, err := json.Marshal(payload)
+	if err != nil {
+		respondWithErr(w, http.StatusInternalServerError, err, "Failed to marshal the payload")
+		return
+	}
+
+	w.WriteHeader(code)
+	w.Write(writeData)
 }

@@ -1,15 +1,26 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
+	"os"
 )
 
 const port = "8888"
 
 func main() {
 	fmt.Println("Starting the main server")
+
+	godotenv.Load()
+	dbURL := os.Getenv("PG_CONN")
+	_, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatalln("Failed to connect to database", err)
+		return
+	}
 
 	staticFS := http.FileServer(http.Dir("./src/static"))
 	mux := http.NewServeMux()
