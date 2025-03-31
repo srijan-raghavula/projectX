@@ -1,0 +1,20 @@
+-- +goose Up
+CREATE TABLE posts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    author UUID REFERENCES users(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    body TEXT DEFAULT NULL,
+    media TEXT[] DEFAULT ARRAY[]::TEXT[],
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    isPrivate BOOLEAN DEFAULT FALSE,
+    likes BIGINT DEFAULT 0,
+    comments BIGINT DEFAULT 0,
+    shares BIGINT DEFAULT 0,
+    isDeleted BOOLEAN DEFAULT FALSE,
+    flagged BOOLEAN DEFAULT FALSE,
+    flag TEXT DEFAULT NULL
+);
+
+-- +goose Down
+DROP TABLE posts;
